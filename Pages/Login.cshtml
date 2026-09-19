@@ -1,0 +1,212 @@
+@page
+@model LoginModel
+@{
+    ViewData["Title"] = Model.LoggedInAdmin is null ? "Administrator Login" : "Administrator Dashboard";
+}
+
+@if (Model.LoggedInAdmin is null)
+{
+    <div class="centered-page">
+        <h1 class="page-title">Administrator Login</h1>
+        <p class="page-subtitle">Sign in with a staff account to manage students, units, enrolments, and grades.</p>
+
+        <div class="section-card" style="max-width: 420px;">
+            @if (Model.ErrorMessage is not null)
+            {
+                <p style="color:#b3261e; font-weight:600;">@Model.ErrorMessage</p>
+            }
+            <form method="post" asp-page-handler="Login">
+                <label>Staff ID</label>
+                <input class="search-box" type="text" asp-for="StaffId" placeholder="e.g. STF0001" />
+                <label>Password</label>
+                <input class="search-box" type="password" asp-for="Password" />
+                <button type="submit" class="badge" style="border:none; cursor:pointer; padding: 10px 18px; font-size: 0.9rem;">
+                    Log in
+                </button>
+            </form>
+            <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 14px;">
+                Demo account: Staff ID <code>STF0001</code>, password <code>ecu2026</code>.
+                (Plaintext demo credentials only - see the code comments for what a
+                real system must do instead.)
+            </p>
+        </div>
+    </div>
+}
+else
+{
+    <div style="display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:8px;">
+        <div>
+            <h1 class="page-title" style="margin-bottom:2px;">Administrator Dashboard</h1>
+            <p class="page-subtitle" style="margin-bottom:18px;">
+                Signed in as <strong>@Model.LoggedInAdmin.Name</strong> (@Model.LoggedInAdmin.StaffId)
+            </p>
+        </div>
+        <form method="post" asp-page-handler="Logout">
+            <button type="submit" style="border:1px solid var(--ecu-border); background:#fff; color:#b3261e; border-radius:999px; padding:8px 16px; cursor:pointer; font-weight:600;">
+                Log out
+            </button>
+        </form>
+    </div>
+
+    <div class="stat-grid">
+        <div class="stat-card">
+            <div class="stat-value">@Model.TotalStudents</div>
+            <div class="stat-label">Students</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">@Model.TotalUnits</div>
+            <div class="stat-label">Units</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">@Model.TotalEnrolments</div>
+            <div class="stat-label">Enrolments</div>
+        </div>
+    </div>
+
+    <div class="action-grid">
+        <a class="action-card @(Model.View == "students" ? "action-active" : "")" href="/Login?view=students">Register / view students</a>
+        <a class="action-card @(Model.View == "units" ? "action-active" : "")" href="/Login?view=units">Add / view units</a>
+        <a class="action-card @(Model.View == "enrol" ? "action-active" : "")" href="/Login?view=enrol">Enrol a student</a>
+        <a class="action-card @(Model.View == "grade" ? "action-active" : "")" href="/Login?view=grade">Record a grade</a>
+    </div>
+
+    @if (Model.ErrorMessage is not null)
+    {
+        <p style="color:#b3261e; font-weight:600;">@Model.ErrorMessage</p>
+    }
+    @if (Model.StatusMessage is not null)
+    {
+        <p style="color:#0c8a4c; font-weight:600;">@Model.StatusMessage</p>
+    }
+
+    @if (Model.View == "students")
+    {
+        <div class="section-card">
+            <h2>Register a new student</h2>
+            <form method="post" asp-page-handler="RegisterStudent">
+                <label>Full name</label>
+                <input class="search-box" type="text" asp-for="NewStudentName" placeholder="e.g. Jordan Lee" />
+                <label>Course</label>
+                <input class="search-box" type="text" asp-for="NewStudentCourse" list="course-list" placeholder="e.g. Bachelor of Computer Science" />
+                <datalist id="course-list">
+                    @foreach (var c in Model.CourseNames)
+                    {
+                        <option value="@c"></option>
+                    }
+                </datalist>
+                <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: -8px; margin-bottom: 14px;">
+                    A student ID starting with "10" is generated automatically.
+                </p>
+                <button type="submit" class="badge" style="border:none; cursor:pointer; padding: 10px 18px; font-size: 0.9rem;">
+                    Register student
+                </button>
+            </form>
+        </div>
+
+        <div class="section-card">
+            <h2>All students (@Model.AllStudents.Count)</h2>
+            <table class="data-table">
+                <thead>
+                    <tr><th>Student ID</th><th>Name</th><th>Course</th><th>WAM</th><th>Units</th></tr>
+                </thead>
+                <tbody>
+                @foreach (var s in Model.AllStudents)
+                {
+                    <tr>
+                        <td>@s.StudentId</td>
+                        <td>@s.Name</td>
+                        <td>@s.Course</td>
+                        <td><span class="badge">@s.Wam.ToString("0.0")</span></td>
+                        <td>@s.Enrolments.Count</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
+    else if (Model.View == "units")
+    {
+        <div class="section-card">
+            <h2>Add a new unit</h2>
+            <form method="post" asp-page-handler="AddUnit">
+                <label>Unit code</label>
+                <input class="search-box" type="text" asp-for="NewUnitCode" placeholder="e.g. CSP9999" />
+                <label>Title</label>
+                <input class="search-box" type="text" asp-for="NewUnitTitle" placeholder="e.g. Advanced Topics in AI" />
+                <label>Course</label>
+                <input class="search-box" type="text" asp-for="NewUnitCourse" list="course-list" placeholder="e.g. Bachelor of Computer Science" />
+                <datalist id="course-list">
+                    @foreach (var c in Model.CourseNames)
+                    {
+                        <option value="@c"></option>
+                    }
+                </datalist>
+                <label>Credit points</label>
+                <input class="search-box" type="number" min="1" asp-for="NewUnitCreditPoints" />
+                <button type="submit" class="badge" style="border:none; cursor:pointer; padding: 10px 18px; font-size: 0.9rem;">
+                    Add unit
+                </button>
+            </form>
+        </div>
+
+        <div class="section-card">
+            <h2>All units (@Model.AllUnits.Count)</h2>
+            <div style="max-height: 420px; overflow-y: auto;">
+            <table class="data-table">
+                <thead>
+                    <tr><th>Code</th><th>Title</th><th>Course</th><th>Credit points</th></tr>
+                </thead>
+                <tbody>
+                @foreach (var u in Model.AllUnits)
+                {
+                    <tr>
+                        <td>@u.UnitCode</td>
+                        <td>@u.Title</td>
+                        <td>@u.Course</td>
+                        <td>@u.CreditPoints</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+            </div>
+        </div>
+    }
+    else if (Model.View == "enrol")
+    {
+        <div class="section-card" style="max-width: 480px;">
+            <h2>Enrol a student in a unit</h2>
+            <form method="post" asp-page-handler="EnrolStudent">
+                <label>Student ID</label>
+                <input class="search-box" type="text" asp-for="EnrolStudentId" placeholder="e.g. 10730907" />
+                <label>Unit code</label>
+                <input class="search-box" type="text" asp-for="EnrolUnitCode" placeholder="e.g. CSP3341" />
+                <label>Semester</label>
+                <input class="search-box" type="text" asp-for="EnrolSemester" />
+                <button type="submit" class="badge" style="border:none; cursor:pointer; padding: 10px 18px; font-size: 0.9rem;">
+                    Enrol student
+                </button>
+            </form>
+        </div>
+    }
+    else if (Model.View == "grade")
+    {
+        <div class="section-card" style="max-width: 480px;">
+            <h2>Record a grade</h2>
+            <form method="post" asp-page-handler="RecordGrade">
+                <label>Student ID</label>
+                <input class="search-box" type="text" asp-for="GradeStudentId" placeholder="e.g. 10730907" />
+                <label>Unit Code</label>
+                <input class="search-box" type="text" asp-for="GradeUnitCode" placeholder="e.g. CSP3341" />
+                <label>Mark (0–100)</label>
+                <input class="search-box" type="number" min="0" max="100" asp-for="GradeMark" />
+                <button type="submit" class="badge" style="border:none; cursor:pointer; padding: 10px 18px; font-size: 0.9rem;">
+                    Record grade
+                </button>
+            </form>
+            <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 14px;">
+                The student must already be enrolled in the unit - try
+                <code>10730907</code> / <code>CSP3341</code> from the seeded roster.
+            </p>
+        </div>
+    }
+}

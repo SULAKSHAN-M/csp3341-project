@@ -1,0 +1,57 @@
+@inject StudentRecordManagement.Web.Domain.Registrar Registrar
+@{
+    var adminStaffId = Context.Session.GetString("AdminStaffId");
+    var loggedInAdmin = adminStaffId is null ? null : Registrar.FindAdministrator(adminStaffId);
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Student Record Management System</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-inner">
+            <a class="brand" href="/">
+                <img src="~/images/ecu-logo.png" alt="Edith Cowan University" class="brand-logo" />
+                <span class="brand-text">
+                    <span class="brand-title">Student Record Management System</span>
+                    <span class="brand-subtitle">CSP3341 - Programming Languages and Paradigms · 2026</span>
+                </span>
+            </a>
+            <nav class="site-nav">
+                <a asp-page="/Index">Dashboard</a>
+                <a asp-page="/Units">Unit Catalogue</a>
+                <a asp-page="/Students">Students</a>
+                <a asp-page="/Transcript">Transcript Lookup</a>
+                @if (loggedInAdmin is null)
+                {
+                    <a asp-page="/Login">Administrator Login</a>
+                }
+                else
+                {
+                    <a asp-page="/Login" style="font-weight:700;">Admin Dashboard</a>
+                    <span style="padding: 8px 6px; color: var(--text-muted); font-size: 0.88rem;">
+                        Signed in: @loggedInAdmin.Name
+                    </span>
+                    <form method="post" asp-page="/Login" asp-page-handler="Logout" style="display:inline;">
+                        <button type="submit" style="border:none; background:none; color:#b3261e; cursor:pointer; font-weight:600; font-size: 0.92rem; padding: 8px 14px;">
+                            Log out
+                        </button>
+                    </form>
+                }
+            </nav>
+        </div>
+    </header>
+
+    <main class="site-main">
+        @RenderBody()
+    </main>
+
+    <footer class="site-footer">
+        <span>&copy; 2026 Edith Cowan University - Student Record Management System (demonstration application, CSP3341).</span>
+    </footer>
+</body>
+</html>

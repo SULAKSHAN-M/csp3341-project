@@ -1,0 +1,66 @@
+@page
+@model StudentsModel
+@{
+    ViewData["Title"] = "Students";
+}
+
+<h1 class="page-title">Students</h1>
+<p class="page-subtitle">Every student ID follows the ECU format and starts with "10" (e.g. 10730907).</p>
+
+@if (Model.Selected is not null)
+{
+    <div class="section-card">
+        <h2>@Model.Selected.Name <span class="badge badge-muted">@Model.Selected.StudentId</span></h2>
+        <p class="page-subtitle" style="margin-bottom: 14px;">@Model.Selected.Course &middot; WAM: <strong>@Model.Selected.Wam.ToString("0.0")</strong></p>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Unit</th>
+                    <th>Semester</th>
+                    <th>Mark</th>
+                    <th>Grade</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var e in Model.Selected.Enrolments)
+            {
+                <tr>
+                    <td>@e.UnitCode</td>
+                    <td>@e.Semester</td>
+                    <td>@e.Mark</td>
+                    <td><span class="@StudentsModel.GradeCssClass(e.Grade)">@e.Grade</span></td>
+                </tr>
+            }
+            </tbody>
+        </table>
+        <p style="margin-top: 16px;"><a href="/Students">&larr; Back to all students</a></p>
+    </div>
+}
+else
+{
+    <div class="section-card">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Student ID</th>
+                    <th>Name</th>
+                    <th>Course</th>
+                    <th>WAM</th>
+                    <th>Units enrolled</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var s in Model.AllStudents)
+            {
+                <tr>
+                    <td><a href="/Students?Id=@s.StudentId">@s.StudentId</a></td>
+                    <td>@s.Name</td>
+                    <td>@s.Course</td>
+                    <td><span class="badge">@s.Wam.ToString("0.0")</span></td>
+                    <td>@s.Enrolments.Count</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+}
