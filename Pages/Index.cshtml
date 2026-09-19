@@ -1,0 +1,73 @@
+@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<h1 class="page-title">Dashboard</h1>
+<p class="page-subtitle">2026 catalogue snapshot for the Student Record Management System.</p>
+
+<div class="stat-grid">
+    <div class="stat-card">
+        <div class="stat-value">@Model.TotalUnits</div>
+        <div class="stat-label">Units in catalogue</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">@Model.TotalCourses</div>
+        <div class="stat-label">Bachelor programs</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">@Model.TotalStudents</div>
+        <div class="stat-label">Enrolled students</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">@Model.AverageWam.ToString("0.0")</div>
+        <div class="stat-label">Average WAM across roster</div>
+    </div>
+</div>
+
+<div class="section-card">
+    <h2>Top students by WAM</h2>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Student ID</th>
+                <th>Name</th>
+                <th>Course</th>
+                <th>WAM</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var s in Model.TopStudents)
+        {
+            <tr>
+                <td>@s.StudentId</td>
+                <td>@s.Name</td>
+                <td>@s.Course</td>
+                <td><span class="badge">@s.Wam.ToString("0.0")</span></td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+
+<div class="section-card">
+    <h2>Units per Bachelor program</h2>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Course</th>
+                <th>Unit count</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var (course, count) in Model.CourseBreakdown)
+        {
+            <tr>
+                <td>@course</td>
+                <td>@count</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

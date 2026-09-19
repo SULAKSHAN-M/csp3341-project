@@ -1,0 +1,281 @@
+:root {
+  --ecu-black: #111111;
+  --ecu-mint: #43ff8f;
+  --ecu-mint-deep: #159a5a;
+  --ecu-grey: #f4f6f5;
+  --ecu-border: #e2e6e4;
+  --text: #1a1a1a;
+  --text-muted: #5b6462;
+  --radius: 14px;
+  --shadow: 0 1px 2px rgba(16, 24, 21, 0.06), 0 6px 20px rgba(16, 24, 21, 0.06);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", "Inter", system-ui, -apple-system, sans-serif;
+  color: var(--text);
+  background: var(--ecu-grey);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---- Header ---- */
+.site-header {
+  background: #ffffff;
+  border-bottom: 1px solid var(--ecu-border);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.header-inner {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.brand-logo {
+  height: 44px;
+  width: auto;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.brand-title {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--ecu-black);
+}
+
+.brand-subtitle {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.site-nav {
+  display: flex;
+  gap: 6px;
+}
+
+.site-nav a {
+  text-decoration: none;
+  color: var(--ecu-black);
+  font-weight: 600;
+  font-size: 0.92rem;
+  padding: 8px 14px;
+  border-radius: 999px;
+  transition: background 0.15s ease;
+}
+
+.site-nav a:hover {
+  background: var(--ecu-grey);
+}
+
+.site-nav a.active {
+  background: var(--ecu-mint);
+}
+
+/* ---- Main ---- */
+.site-main {
+  flex: 1;
+  max-width: 1080px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 32px 24px 48px;
+}
+
+h1.page-title {
+  font-size: 1.7rem;
+  margin: 0 0 6px;
+}
+
+p.page-subtitle {
+  color: var(--text-muted);
+  margin: 0 0 28px;
+}
+
+/* ---- Cards / stats ---- */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.stat-card {
+  background: #ffffff;
+  border: 1px solid var(--ecu-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px;
+}
+
+.stat-card .stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--ecu-black);
+}
+
+.stat-card .stat-label {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin-top: 4px;
+}
+
+.section-card {
+  background: #ffffff;
+  border: 1px solid var(--ecu-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.section-card h2 {
+  margin-top: 0;
+  font-size: 1.15rem;
+}
+
+/* ---- Tables ---- */
+table.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+
+table.data-table th {
+  text-align: left;
+  padding: 10px 12px;
+  background: var(--ecu-grey);
+  color: var(--ecu-black);
+  font-weight: 700;
+  border-bottom: 2px solid var(--ecu-border);
+}
+
+table.data-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--ecu-border);
+  vertical-align: top;
+}
+
+table.data-table tr:hover td {
+  background: #fbfdfc;
+}
+
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  background: var(--ecu-mint);
+  color: var(--ecu-black);
+}
+
+.badge-muted {
+  background: var(--ecu-grey);
+  color: var(--text-muted);
+  border: 1px solid var(--ecu-border);
+}
+
+.grade-hd { color: #0c8a4c; font-weight: 700; }
+.grade-d  { color: #159a5a; font-weight: 700; }
+.grade-c  { color: #b98900; font-weight: 700; }
+.grade-p  { color: #8a6d00; font-weight: 700; }
+.grade-n, .grade-na { color: #b3261e; font-weight: 700; }
+
+.search-box {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--ecu-border);
+  border-radius: 10px;
+  font-size: 0.95rem;
+  margin-bottom: 20px;
+}
+
+/* ---- Centered single-card pages (Login) ---- */
+.centered-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.centered-page .section-card {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+  width: 100%;
+}
+
+/* ---- Admin dashboard action cards ---- */
+.action-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+  margin: 24px 0 28px;
+}
+
+.action-card {
+  display: block;
+  text-align: center;
+  background: #ffffff;
+  border: 1.5px solid var(--ecu-border);
+  border-radius: var(--radius);
+  padding: 18px 14px;
+  font-weight: 700;
+  color: var(--ecu-black);
+  text-decoration: none;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.action-card:hover {
+  border-color: var(--ecu-mint-deep);
+}
+
+.action-card.action-active {
+  border-color: var(--ecu-mint-deep);
+  background: #effdf5;
+  color: var(--ecu-mint-deep);
+}
+
+.course-group h3 {
+  font-size: 1rem;
+  margin: 22px 0 10px;
+  padding-bottom: 6px;
+  border-bottom: 2px solid var(--ecu-mint);
+  display: inline-block;
+}
+
+/* ---- Footer ---- */
+.site-footer {
+  text-align: center;
+  padding: 18px 24px 28px;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+@media (max-width: 620px) {
+  .header-inner { flex-direction: column; align-items: flex-start; }
+  .site-nav { flex-wrap: wrap; }
+}

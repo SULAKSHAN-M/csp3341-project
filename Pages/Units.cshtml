@@ -1,0 +1,46 @@
+@page
+@model UnitsModel
+@{
+    ViewData["Title"] = "Unit Catalogue";
+}
+
+<h1 class="page-title">Unit Catalogue - 2026</h1>
+<p class="page-subtitle">All units currently loaded into the system, grouped by Bachelor program.</p>
+
+<form method="get" class="section-card" style="padding: 16px 24px;">
+    <input class="search-box" type="text" name="Search" value="@Model.Search"
+           placeholder="Search by unit code, title, or course (e.g. CSP3341, Marketing, Nursing)..." />
+</form>
+
+@foreach (var group in Model.UnitsByCourse)
+{
+    <div class="course-group">
+        <h3>@group.Key <span class="badge badge-muted">@group.Count() units</span></h3>
+    </div>
+    <div class="section-card">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th style="width: 120px;">Code</th>
+                    <th>Title</th>
+                    <th style="width: 100px;">Credit Points</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var u in group.OrderBy(u => u.UnitCode))
+            {
+                <tr>
+                    <td>@u.UnitCode</td>
+                    <td>@u.Title</td>
+                    <td>@u.CreditPoints</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+}
+
+@if (!Model.UnitsByCourse.Any())
+{
+    <div class="section-card">No units match that search.</div>
+}
